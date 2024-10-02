@@ -41,3 +41,46 @@ it("oneOf is null", async ({ expect }) => {
 
   expect(result).toEqual(expected);
 });
+
+
+it("allOf with nullable", async ({ expect }) => {
+  const schema = {
+    nullable: true,
+    allOf: [
+      {
+        type: "object",
+        required: ["foo"],
+        properties: {
+          foo: {
+            type: "integer",
+          },
+        },
+      },
+    ],
+  };
+
+  const result = convert(schema);
+  const expected = {
+    $schema: "http://json-schema.org/draft-04/schema#",
+    oneOf: [
+      {
+        type: "null",
+      },
+      {
+        allOf: [
+          {
+            type: "object",
+            required: ["foo"],
+            properties: {
+              foo: {
+                type: "integer",
+              },
+            },
+          },
+        ],
+      },
+    ],
+  };
+
+  expect(result).toEqual(expected);
+});
